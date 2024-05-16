@@ -1,6 +1,7 @@
 import { Request, NextFunction, Response } from "express";
 import { string, z } from "zod";
 import { userServices } from "../services/userServices";
+import { userRepository } from "../repositories/userRepository";
 
 export const userControllers = {
   async create(req: Request, res: Response, next: NextFunction) {
@@ -37,7 +38,7 @@ export const userControllers = {
 
       const { name, email, password } = userSchema.parse(req.body);
 
-      const userCreated = await userServices.create({ name, email, password }, );
+      const userCreated = await userServices.create({ name, email, password }, userRepository );
 
       return res.status(201).json({ message: "User create!", userCreated });
     } catch (error) {
