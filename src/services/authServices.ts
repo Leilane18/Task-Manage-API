@@ -14,12 +14,12 @@ export const authServices = {
       const { email, password } = data;
 
       const user = await repository.getUserByEmail(email);
-      if (!user) throw appError("Email or password invalid!", 401);
+      if (!user) throw appError("email or password invalid!", 401);
 
       const passwordCheck = await compare(password, user.password);
       if (!passwordCheck) throw appError("email or password invalid!", 401);
 
-      const token = sign({id: user.id}, process.env.SECRET_TOKEN, {
+      const token = sign({ id: user.id }, process.env.SECRET_TOKEN, {
         expiresIn: process.env.EXPIRESIN_TOKEN,
       });
 

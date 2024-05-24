@@ -1,4 +1,4 @@
-import { date, z } from "zod";
+import { z } from "zod";
 
 export const taskSchema = z
   .object({

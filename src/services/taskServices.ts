@@ -1,13 +1,16 @@
 import { randomUUID } from "node:crypto";
 import { TaskDataTypes } from "../validations/taskSchema";
 import { appError } from "../errors/appError";
+import { PaginationDataTypes } from "../validations/paginationSchema";
 
 export type CreateTaskDataTypes = TaskDataTypes & { id_user: string };
+export type UserTasksPagination = PaginationDataTypes & { userID: string };
 
 type Repository = {
-  createTask(data: CreateTaskDataTypes): Promise<{ id: string } | undefined>;
-  updateTask(data: CreateTaskDataTypes): Promise<{ id: string } | undefined>;
+  createTask(data: CreateTaskDataTypes): Promise<{} | undefined>;
+  updateTask(data: CreateTaskDataTypes): Promise<{} | undefined>;
   getTask(id: string): Promise<{ id_user: string } | undefined>;
+  getTasks(data: UserTasksPagination): Promise<{} | undefined>;
   deleteTask(id: string): Promise<{} | undefined>;
 };
 
@@ -33,6 +36,21 @@ export const taskServices = {
     }
   },
 
+  async read(data: UserTasksPagination, repository: Repository) {
+    try {
+      const { userID, limit, offset, filter } = data;
+
+      if (!limit || !offset || !filter) {
+        throw appError("please inform limit, offset and filter", 400);
+      }
+      const userTasks = await repository.getTasks({ userID, limit, offset, filter });
+
+      return userTasks;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async update(id: string, data: CreateTaskDataTypes, repository: Repository) {
     try {
       const { title, description, date, status, id_user } = data;
@@ -53,9 +71,9 @@ export const taskServices = {
         throw appError("user not authorized to update!", 401);
       }
 
-      const taskUpdate = await repository.updateTask(task);
+      const taskUpdated = await repository.updateTask(task);
 
-      return taskUpdate;
+      return taskUpdated;
     } catch (error) {
       throw error;
     }
@@ -71,6 +89,8 @@ export const taskServices = {
       }
 
       const taskDelete = await repository.deleteTask(taskID);
+
+      console.log(taskDelete);
 
       if (!taskDelete) throw appError("task not deleted!", 500);
 

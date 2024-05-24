@@ -1,14 +1,10 @@
 import { Request, NextFunction, Response } from "express";
-import { JwtPayload, decode, verify } from "jsonwebtoken";
+import { JwtPayload, verify } from "jsonwebtoken";
 
-export function authMiddlewares(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const { cookie } = req.headers;
 
-  if (!cookie) return res.status(401).json({ message: "token is requied!" });
+  if (!cookie) return res.status(401).json({ message: "token is required!" });
 
   const splitCookie = cookie.split("=");
 
@@ -17,11 +13,11 @@ export function authMiddlewares(
   }
 
   verify(splitCookie[1], process.env.SECRET_TOKEN, (error, decoded) => {
-    if (error)
-      throw res.status(401).json({ message: error.message || "token error!" });
+    if (error) throw res.status(401).json({ message: error.message || "token error!" });
 
     const { id } = decoded as JwtPayload;
     req.userID = id;
+
     return next();
   });
 }

@@ -1,5 +1,4 @@
 import { Request, NextFunction, Response } from "express";
-import { string, z } from "zod";
 import { userServices } from "../services/userServices";
 import { userRepository } from "../repositories/userRepository";
 import { userSchema } from "../validations/userSchema";
@@ -14,7 +13,7 @@ export const userControllers = {
         userRepository
       );
 
-      return res.status(201).json({ message: "User create!", userCreated });
+      return res.status(201).json({ message: "User created!", userCreated });
     } catch (error) {
       return next(error);
     }

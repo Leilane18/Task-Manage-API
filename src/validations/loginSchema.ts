@@ -15,7 +15,7 @@ export const loginSchema = z
         required_error: "password is required!",
         invalid_type_error: "password must be a string!",
       })
-      .max(20, "max password length exceeded!"),
+      .max(255, "max password length exceeded!"),
   })
   .strict();
 
