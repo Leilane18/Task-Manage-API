@@ -7,7 +7,7 @@ export const loginSchema = z
         required_error: "email is required!",
         invalid_type_error: "email must be a string!",
       })
-      .email("email poorly formatted!")
+      .email({ message: "email badly formatted!" })
       .max(255, "max email length exceeded!"),
 
     password: z

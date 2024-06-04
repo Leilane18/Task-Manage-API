@@ -3,13 +3,9 @@ import { tableTasks } from "./tableTasks";
 import { tableUsers } from "./tableUsers";
 
 export async function runMigrations() {
-  const schemes = [tableUsers, tableTasks].join("");
+  const schemas = [tableUsers, tableTasks].join("");
 
   sqliteConnection()
-    .then((db) => {
-      db.exec(schemes);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    .then((db) => db.exec(schemas))
+    .catch((error) => console.error("Migration Error - ", error));
 }

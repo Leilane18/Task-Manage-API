@@ -8,27 +8,29 @@ export const taskSchema = z
         invalid_type_error: "title must be a string!",
       })
       .min(3, "title must have at least 3 characters!")
-      .max(255, "max title length exceeded!"),
+      .max(40, "max title length exceeded!"),
 
     description: z
       .string({
-        required_error: "description is required!",
-        invalid_type_error: "description must be a string!",
+        required_error: "desciption is required!",
+        invalid_type_error: "desciption must be a string!",
       })
-      .min(3, "description must have at least 3 characters!")
-      .max(255, "max description length exceeded!"),
+      .min(3, "desciption must have at least 3 characters!")
+      .max(255, "max desciption length exceeded!"),
 
     date: z
       .string({
         required_error: "date is required!",
         invalid_type_error: "date must be a string!",
       })
-      .datetime("date poorly formatted, must be UTC!"),
+      .datetime("date must be UTC format!"),
 
-    status: z.enum(["completed", "pending"], {
-      required_error: "status is required!",
-      invalid_type_error: "status must be 'completed' or 'pending'!",
-    }),
+    status: z
+      .enum(["completed", "pending"], {
+        invalid_type_error: "status must be a string!",
+        required_error: "status is required and must be 'completed' or 'pending'!",
+      })
+      .optional(),
   })
   .strict();
 

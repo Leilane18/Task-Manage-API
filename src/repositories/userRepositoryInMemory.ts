@@ -1,21 +1,45 @@
-export type UserDataCreate = {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-};
+import { CreateUserDataType } from "./userRepository";
 
-let userArray = [
-  { id: "1", name: "user1", email: "user12@gmail.com", password: "1818" },
+const users = [
+  {
+    id: "1",
+    name: "user1",
+    email: "user1@email.com",
+    password: "$2b$10$7LxCCXAAvkWj8di5um53eOiy2HThbqoLSm07g5Eahm4DmDJbTYrTe",
+  },
+
+  {
+    id: "2",
+    name: "user2",
+    email: "user2@email.com",
+    password: "$2b$10$7LxCCXAAvkWj8di5um53eOiy2HThbqoLSm07g5Eahm4DmDJbTYrTe",
+  },
 ];
 
 export const userRepositoryInMemory = {
-  async createUser({ id, name, email, password }: UserDataCreate) {
+  async createUser(data: CreateUserDataType) {
     try {
-      const user = { id, name, email, password };
-      userArray.push(user);
+      const { id, name, email, password } = data;
 
-      return userArray[userArray.length - 1];
+      const user = {
+        id,
+        name,
+        email,
+        password,
+      };
+
+      users.push(user);
+
+      return users[users.length - 1];
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getUserByID(id: string) {
+    try {
+      const user = users.find((user) => user.id == id);
+      return user;
     } catch (error) {
       throw error;
     }
@@ -23,7 +47,7 @@ export const userRepositoryInMemory = {
 
   async getUserByEmail(email: string) {
     try {
-      const user = userArray.find((user) => user.email == email);
+      const user = users.find((user) => user.email == email);
       return user;
     } catch (error) {
       throw error;
